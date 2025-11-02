@@ -1,0 +1,112 @@
+R1#sh run
+Building configuration...
+
+Current configuration : 1283 bytes
+!
+version 12.4
+no service timestamps log datetime msec
+no service timestamps debug datetime msec
+no service password-encryption
+!
+hostname R1
+!
+no logging console
+!
+!
+!
+!
+!
+!
+!
+no ip cef
+no ipv6 cef
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+spanning-tree mode pvst
+!
+!
+!
+!
+!
+!
+interface FastEthernet0/0
+ ip address 10.0.1.1 255.255.255.0
+ ip ospf authentication-key CCNP
+ ip ospf hello-interval 1
+ ip ospf dead-interval 1
+ ip ospf 1 area 0
+ duplex auto
+ speed auto
+!
+interface FastEthernet0/1
+ no ip address
+ duplex auto
+ speed auto
+ shutdown
+!
+interface Serial0/0/0
+ ip address 10.0.0.1 255.255.255.252
+ ip ospf 2 area 1
+!
+interface Serial0/0/1
+ no ip address
+ clock rate 2000000
+ shutdown
+!
+interface Serial0/1/0
+ ip address 10.0.0.5 255.255.255.252
+ clock rate 2000000
+!
+interface Serial0/1/1
+ no ip address
+ clock rate 2000000
+ shutdown
+!
+interface Vlan1
+ no ip address
+ shutdown
+!
+router ospf 1
+ log-adjacency-changes
+ area 0 authentication
+ redistribute static subnets 
+ redistribute connected subnets 
+ network 10.0.1.0 0.0.0.255 area 0
+!
+router ospf 2
+ log-adjacency-changes
+ area 1 stub no-summary
+ network 10.0.0.0 0.0.0.3 area 1
+!
+ip classless
+ip route 150.3.3.0 255.255.255.0 10.0.0.6 120
+!
+ip flow-export version 9
+!
+!
+!
+!
+!
+!
+!
+!
+line con 0
+!
+line aux 0
+!
+line vty 0 4
+ login
+!
+!
+!
+end
